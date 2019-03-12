@@ -32,31 +32,152 @@ connect 4…
 #include "structs.c"
 
 int* createBoard(int height, int width){//create the heightxwidth int array of the board
-
-
+	int board[width][height];
+	int i;
+	int j;
+	for (i = 0; i < width; i++){
+		for (j=0; j<height; j++){
+			board[i][j] = -1;
+		}
+	}
+return board;
 }
 
-int* player1Choose(int* board, node* graph){//prompt user for column chosen, then update graph and board, then check for win or full
+int* player1Choose(int* board, node* graph, int rows, int cols){//prompt user for column chosen, then update graph and board, then check for win or full
+	int col = -1;
+	int row = -1;
+	//use ints rows and cols to make sure item placed is Valid
+	//prompt for proper column here
+	//do a linear search for next available slot in column here, changing row value
+	//also check to see if column value is valid. 
 
+	board[row][col] = 1; //one is for player 1
+	node* temp = graph;
+	int coll = temp->col; 
+	while (coll != col){
+		if (coll > col){
+			temp = temp->left;
+			coll--;
+		}
+		if (coll < col){
+			temp = temp->right;
+			coll++;
+		}
+	}
+	while (temp->up!=NULL){temp = temp->up;}
+	node* new = new Node(row, col);//this may need to change
+	//check to make sure none of these are null? 
+	temp->up = new; 
+	temp->upright->left = new; 
+	temp->upleft->right = new;
+	temp->left->upright = new;
+	temp->right->upleft = new;
+	temp->upright->up->downleft = new;
+	temp->upleft->up->downright = new;
+	new->down = temp;
+	new->left = temp->upleft;
+	new->right = temp->upright;
+	new->up = NULL;
+	new->upright = temp->upright->up;
+	new->upleft = temp->upleft->up;
+	new->downleft = temp->left;
+	new->downright = temp->right;
+	//what should this return?
 
 }
 
 int* player2Choose(int* board, node* graph){//prompt user for column chosen, then update graph and board, then check for win or full
+	//copy everything from up there and change like 2 things
 
 }
 
 int* aiChoose(int* board, node* graph){//redirect to function in AI that chooses column, then update, then check
-
+	//copy from up there and change like 3 things this time
 
 }
 
 bool isWon(node* graph, node* recent){//checks to see if node named recent formed a connect 4
-	
-
-
-}
-
-bool isFull(int* board, int total){//checks to see if board size == number of pieces placed. buuuut this can prob just be in main
-
-
+	//this is gonna be Annoying to code. but Here We Go
+	//lets check up-- wait. that wont work. just these 7, upright, right, downright, down, downleft, left, then upleft
+	int player = recent->player;
+	node* temp = recent;
+	if (recent->upright->player = player){
+		temp = temp->upright;
+		if (temp->upright->player = player){
+			temp = temp->upright;
+			if (temp->upright->player = player){
+				return true;
+			}
+			else return false;
+		}
+		else return false;
+	}
+	if (recent->right->player = player){
+		temp = temp->right;
+		if (temp->right->player = player){
+			temp = temp->right;
+			if (temp->right->player = player){
+				return true;
+			}
+			else return false;
+		}
+		else return false;
+		
+	}
+	if (recent->downright->player = player){
+		temp = temp->downright;
+		if (temp->downright->player = player){
+			temp = temp->downright;
+			if (temp->downright->player = player){
+				return true;
+			}
+			else return false;
+		}
+		else return false;
+	}
+	if (recent->down->player = player){
+		temp = temp->down;
+		if (temp->down->player = player){
+			temp = temp->down;
+			if (temp->down->player = player){
+				return true;
+			}
+			else return false;
+		}
+		else return false;
+	}
+	if (recent->downleft->player = player){
+		temp = temp->downleft;
+		if (temp->downleft->player = player){
+			temp = temp->downleft;
+			if (temp->downleft->player = player){
+				return true;
+			}
+			else return false;
+		}
+		else return false;
+	}
+	if (recent->left->player = player){
+		temp = temp->left;
+		if (temp->left->player = player){
+			temp = temp->left;
+			if (temp->left->player = player){
+				return true;
+			}
+			else return false;
+		}
+		else return false;
+	}
+	if (recent->upleft->player = player){
+		temp = temp->upleft;
+		if (temp->upleft->player = player){
+			temp = temp->upleft;
+			if (temp->upleft->player = player){
+				return true;
+			}
+			else return false;
+		}
+		else return false;
+	}
+	else return false;
 }
