@@ -50,6 +50,26 @@ int* player1Choose(int* board, node* graph, int rows, int cols){//prompt user fo
 	//prompt for proper column here
 	//do a linear search for next available slot in column here, changing row value
 	//also check to see if column value is valid. 
+	if (board[col][rows-1] != -1){
+		//column choice is not valid, ask for another
+	}
+	int temp = 0;
+	else {
+		int i;
+		for (i = 0; i < rows-1; i=i*2){
+			if (board[col][i] == -1){
+				temp = i;
+				break;
+			}
+		}
+		if (temp ==  0) {
+			row = 0;
+		}
+		while (board[col][temp] == -1 && flag != 0){
+			temp = temp-1;
+		}
+		row = temp + 1;
+	}
 
 	board[row][col] = 1; //one is for player 1
 	node* temp = graph;

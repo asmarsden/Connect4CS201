@@ -68,8 +68,8 @@ int main(void){
 		if (player == 1){player1score++;}
 		if (player == 2 || player == 3){player2score++;}
 		player = 0;
-		//somehow i gotta figure out how this will wrap around to up there again. hmmm. big big while loop? big big while loop.
-		//free all the necessary stuff here
+		freeGraph(graph);
+		free(board);
 	}
 }
 
@@ -88,4 +88,8 @@ void playGame(stuff){//remember there is a number that gets increased every time
 	}
 //return... what should i return here.
 
+}
+
+void freeGraph(NODE* graph){
+	//do a dfs or bfs and free Every Node. 
 }
