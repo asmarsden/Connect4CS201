@@ -46,6 +46,17 @@ return board;
 int* player1Choose(int* board, node* graph, int rows, int cols){//prompt user for column chosen, then update graph and board, then check for win or full
 	int col = -1;
 	int row = -1;
+	bool validAnswer = false;
+	printf("Which column would you like to place a piece in? Please enter a valid number.\n");
+	//scan in
+	//check if valid. 
+	while (!validAnswer){
+		printf("That is not a valid column choice, please try again.\n");
+		//scan in
+		//check and update if answer is valid
+	}
+	
+	//scan in col
 	//use ints rows and cols to make sure item placed is Valid
 	//prompt for proper column here
 	//do a linear search for next available slot in column here, changing row value
@@ -68,6 +79,7 @@ int* player1Choose(int* board, node* graph, int rows, int cols){//prompt user fo
 		while (board[col][temp] == -1 && flag != 0){
 			temp = temp-1;
 		}
+		
 		row = temp + 1;
 	}
 
@@ -201,3 +213,12 @@ bool isWon(node* graph, node* recent){//checks to see if node named recent forme
 	}
 	else return false;
 }
+
+
+
+/* 
+alright so change of plans. we will have a matrix that holds where each piece is, and another matrix that is an adjacency matrix... so maybe... 
+a matrix for individual pieces (-1 for none, 1 for player 1, 2 for player 2, 3 for ai)
+then two matrices that just show like. individual pieces? maybe? hmm
+also i think ill go with an ascii interface just because i dont wanna Fight with something. it needs to open an .exe though i think which is gonna suck
+also also. i need to have the program run some sort of thing on a graph to decide what to do next. ugh

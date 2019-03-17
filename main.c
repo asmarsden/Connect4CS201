@@ -33,13 +33,23 @@ int player2score;
 int main(void){
 	player1score = 0;
 	player2score = 0;
-	//prompt for game type
-	//prompt for board size
+	bool validAnswer = false;
+	while(!validAnswer){
+		printf("Welcome. Would you like to play against AI or against another player? 
+			Please enter 'AI' or 'player'.");
+		//scan in answer
+
+	}validAnswer = false;
+	while (!validAnswer){
+		printf("Very well. What size would you like the board to be? Please enter in format #x#.\n
+		Note that board sizes over 40x40 may not function as intended, and board sizes under 4x4 are disabled.");
+	//scan in answer
+	}
 	int tall = //readin;
 	int wide = //readin;
 	bool wantsToPlay = true;
 	while (wantsToPlay){
-		int* = createBoard(tall, wide);//figure out how to transfer 2 dimensional int arrays
+		int* board= createBoard(tall, wide);//figure out how to transfer 2 dimensional int arrays
 		//create graph object;
 		bool gameFinished = false;
 		bool fourConnected = false;
@@ -51,6 +61,7 @@ int main(void){
 		int player = 1;
 		bool ai = false;//check to see if this needs to be set to true during prompting shit
 		while (!gameFinished){
+			printBoard(wide, tall, board);
 			playGame(stuff){};//stuff == which player, ai or player2, the board itself, the graph, # of pieces
 			piecesPlaced++;
 			if (piecesPlaced >= boardSize) boardFilled = true;
@@ -92,4 +103,27 @@ void playGame(stuff){//remember there is a number that gets increased every time
 
 void freeGraph(NODE* graph){
 	//do a dfs or bfs and free Every Node. 
+}
+
+void printBoard(int cols, int rows, int* board){
+	system("clear");
+	int i = 0; int j = 0;
+	for (j = 0; j < cols; j++){
+		printf(' %d ', j);
+	}
+	printf('\n');
+	for (i = 0; i < rows, i++){
+		for (j = 0; j < cols, j++){
+			printf(' _ ');
+		}
+		printf('\n');
+		for (j = 0; j < cols, j++){
+			printf('|%d', board[j][i]);
+		}
+		printf('|\n');
+	}
+	for (j = 0; j < cols, j++){
+		printf(' _ ');
+	}
+	return;
 }
