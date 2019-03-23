@@ -1,3 +1,7 @@
+//well this was a waste of time
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "node.h"

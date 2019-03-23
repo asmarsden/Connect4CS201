@@ -25,7 +25,6 @@ if not, erase scores then goto start of program somehow
 #include <stdlib.h>
 #include "ai.c"
 #include "connect.c"
-#include "structs.c"
 
 int player1score;
 int player2score;
@@ -34,75 +33,94 @@ int main(void){
 	player1score = 0;
 	player2score = 0;
 	bool validAnswer = false;
+	bool ai = false;
+	printf("Welcome. Would you like to play against AI or against another player? 
+			Please enter 'AI' or 'player'.\n");
+	//scan in answer
+	//check if valid
 	while(!validAnswer){
-		printf("Welcome. Would you like to play against AI or against another player? 
-			Please enter 'AI' or 'player'.");
+		printf("Sorry, that isn't a valid answer. Please try again.\n");
 		//scan in answer
 
-	}validAnswer = false;
+	}
+	validAnswer = false;
+	printf("Very well. What size would you like the board to be? Please enter in format #x#.\n
+		Note that board sizes over 40x40 may not function as intended, and board sizes under 4x4 are disabled.\n");
+	//scan in answer
 	while (!validAnswer){
-		printf("Very well. What size would you like the board to be? Please enter in format #x#.\n
-		Note that board sizes over 40x40 may not function as intended, and board sizes under 4x4 are disabled.");
+		printf("Sorry, that isn't a valid answer. Please try again.\n");
 	//scan in answer
 	}
+	validAnswer = false;
 	int tall = //readin;
 	int wide = //readin;
 	bool wantsToPlay = true;
+	int score1 = 0;
+	int score2 = 0;
+	bool gameFinished = false;
+	bool isWon = false;
+	bool boardFilled = false;
+	int piecesPlaced = 0;
+
 	while (wantsToPlay){
-		int* board= createBoard(tall, wide);//figure out how to transfer 2 dimensional int arrays
-		//create graph object;
-		bool gameFinished = false;
-		bool fourConnected = false;
-		bool boardFilled = false;
-		bool previousGame = false;
-		int piecesPlaced = 0;
+		int board[wide][tall];
+		int i, j;
+		for (i = 0; i < wide; i++){
+			for (j = 0; j < tall; j++){
+				board[i][j] = -1;
+			}
+		}
+		
+		gameFinished = false;
+		fourConnected = false;
+		boardFilled = false;
+		piecesPlaced = 0;
 		int boardSize = tall * wide;
 		int playerWon = 0; //0 for not won yet, 1 for player 1, 2 for player 2, 3 forr AI;
-		int player = 1;
-		bool ai = false;//check to see if this needs to be set to true during prompting shit
+		int player = 2;
+		int currentCol = -1;
 		while (!gameFinished){
-			printBoard(wide, tall, board);
-			playGame(stuff){};//stuff == which player, ai or player2, the board itself, the graph, # of pieces
-			piecesPlaced++;
-			if (piecesPlaced >= boardSize) boardFilled = true;
-			fourConnected = checkIfWon(stuff);
-			if (fourConnected = true) {gameFinished = true; playerWon = player;}//update scores if needed, display proper thing
-			if (boardFilled = true) gameFinished = true; //do not change scores. display  proper thing
-			
 			if (player == 1){
 				if (ai) player == 3;
 				else player == 2;
 			}
 			if (player != 1) {player = 1;}
+
+			printBoard(wide, tall, board);
+			
+			if (player == 1){
+				currentCol = player1Choose(wide, tall, board);
+			}
+			if (player == 2){
+				if (ai){
+					currentCol = aiChoose(wide, tall, board, currentCol);
+				}
+				else currentCol = player2Choose(wide, tall, board);
+			}
+
+			piecesPlaced++;
+			fourConnected = checkIfWon(wide, tall, board, currentCol);
+			if (fourConnected) {gameFinished = true; playerWon = player; break;}
+
+			if (piecesPlaced >= boardSize) {boardFilled = true; gameFinished = true; playerWon = 0;}
 		}
-		//do stuff here for after game stuff, ask if theyd like to play again and updating scores
-		if (player == 1){player1score++;}
-		if (player == 2 || player == 3){player2score++;}
-		player = 0;
-		freeGraph(graph);
-		free(board);
-	}
-}
 
-void playGame(stuff){//remember there is a number that gets increased every time a piece gets placed
-	if (player == 1){
-		player1choose(board, graph, rows, cols);
-		//this returns... the board and stuff? i guess?
+		if (playerWon == 0) {printf("The board has been filled and no one scored a point.\n");}
+		if (playerWon == 1) score1++;
+		if (playerWon == 2) score2++;
+		printf("The score: Player 1 has %d points and ", score1);
+		if (ai) printf("the AI has %d points.\n", score2);
+		else printf("Player 2 has %d points.\n", score2);
+		printf("Would you like to play again? Y/N\n");
+		//scan in
+		//check if valid
+		while(!validAnswer){
+			printf("Sorry, that is not a valid answer. Please try again.\n");
+			//scan in
+			//check
+		}
+		//do i need to free the board? hmm
 	}
-	if (player == 2){
-		player2choose(board, graph, rows, cols);
-		//this returns... the board and stuff? i guess?
-	}
-	if (player == 3){
-		aiChoose(board, graph, rows, cols);
-		//this returns... the board and stuff? i guess?
-	}
-//return... what should i return here.
-
-}
-
-void freeGraph(NODE* graph){
-	//do a dfs or bfs and free Every Node. 
 }
 
 void printBoard(int cols, int rows, int* board){
