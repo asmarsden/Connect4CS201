@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 int player1Choose(int rows, int cols, int[rows][cols] board);
 int player2Choose(int rows, int cols, int[rows][cols] board);
 int aiChoose(int rows, int cols, int[rows][cols] board, int prevCol);

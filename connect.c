@@ -28,22 +28,27 @@ connect 4…
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "ai.c"
+#include <string.h>
+#include "connect.h"
 
 int player1Choose(int rows, int cols, int[rows][cols] board){//prompt user for column chosen, then update graph and board, then check for win or full
 	int col = -1;
 	int row = -1;
 	bool validAnswer = false;
 	printf("Which column would player 1 like to place a piece in? Please enter a valid number.\n");
-	//scan in
-	if (board[col][rows-1] == -1){
+	scanf("%d", col);
+	if (col >= 0 && col < rows){
+		if (board[col][rows-1] == -1){
 		validAnswer = true;
+		}
 	}
 	while (!validAnswer){
 		printf("That is not a valid column choice, please try again.\n");
-		//scan in
-		if (board[col][rows-1] == -1){
+		scanf("%d", col);
+		if (col >= 0 && col < rows){
+			if (board[col][rows-1] == -1){
 			validAnswer = true;
+			}
 		}
 	}
 	row = findMostRecent(rows, cols, board, col);
@@ -56,15 +61,22 @@ int player2Choose(int rows, int cols, int[rows][cols] board){//prompt user for c
 	int row = -1;
 	bool validAnswer = false;
 	printf("Which column would player 2 like to place a piece in? Please enter a valid number.\n");
-	//scan in
+	scanf("%d", col);
+	if (col >= 0 && col < rows){
+		if (board[col][rows-1] == -1){
+		validAnswer = true;
+		}
+	}
 	if (board[col][rows-1] == -1){
 		validAnswer = true;
 	}
 	while (!validAnswer){
 		printf("That is not a valid column choice, please try again.\n");
-		//scan in
-		if (board[col][rows-1] == -1){
+				scanf("%d", col);
+		if (col >= 0 && col < rows){
+			if (board[col][rows-1] == -1){
 			validAnswer = true;
+			}
 		}
 	}
 	row = findMostRecent(rows, cols, board, col);

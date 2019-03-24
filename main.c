@@ -23,8 +23,8 @@ if not, erase scores then goto start of program somehow
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "ai.c"
-#include "connect.c"
+#include <string.h>
+#include "connect.h"
 
 int player1score;
 int player2score;
@@ -34,26 +34,88 @@ int main(void){
 	player2score = 0;
 	bool validAnswer = false;
 	bool ai = false;
+	char[8] answer;
+	int checkAnswer = -1;
 	printf("Welcome. Would you like to play against AI or against another player? 
 			Please enter 'AI' or 'player'.\n");
-	//scan in answer
-	//check if valid
+	//scan in answer: ai, AI, Ai, player, Player
+	scanf("%s", answer);
+	checkAnswer = strcmp(answer, "AI");
+	if (checkAnswer == 0){
+		validAnswer = true;
+		ai = true;
+	}
+	checkAnswer = strcmp(answer, "ai");
+	if (checkAnswer == 0){
+		validAnswer = true;
+		ai = true;
+	}
+	checkAnswer = strcmp(answer, "Ai");
+	if (checkAnswer == 0){
+		validAnswer = true;
+		ai = true;
+	}
+	checkAnswer = strcmp(answer, "player");
+	if (checkAnswer == 0){
+		validAnswer = true;
+	}
+	checkAnswer = strcmp(answer, "Player");
+	if (checkAnswer == 0){
+		validAnswer = true;
+	}
+	
+	
 	while(!validAnswer){
 		printf("Sorry, that isn't a valid answer. Please try again.\n");
 		//scan in answer
-
+		scanf("%s", answer);
+		checkAnswer = strcmp(answer, "AI");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			ai = true;
+		}
+		checkAnswer = strcmp(answer, "ai");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			ai = true;
+		}
+		checkAnswer = strcmp(answer, "Ai");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			ai = true;
+		}
+		checkAnswer = strcmp(answer, "player");
+		if (checkAnswer == 0){
+			validAnswer = true;
+		}
+		checkAnswer = strcmp(answer, "Player");
+		if (checkAnswer == 0){
+			validAnswer = true;
+		}
 	}
 	validAnswer = false;
 	printf("Very well. What size would you like the board to be? Please enter in format #x#.\n
 		Note that board sizes over 40x40 may not function as intended, and board sizes under 4x4 are disabled.\n");
-	//scan in answer
+	int tall = -1;
+	int wide = -1;
+	char placeholder;
+	scanf("%d", wide);
+	scanf("%c", placeholder);
+	scanf("%d", tall);
+	if (wide > 3 && tall > 3){
+		validAnswer = true;
+	}
 	while (!validAnswer){
 		printf("Sorry, that isn't a valid answer. Please try again.\n");
-	//scan in answer
+		scanf("%d", wide);
+		scanf("%c", placeholder);
+		scanf("%d", tall);
+		if (wide > 3 && tall > 3){
+			validAnswer = true;
+		}
 	}
 	validAnswer = false;
-	int tall = //readin;
-	int wide = //readin;
+
 	bool wantsToPlay = true;
 	int score1 = 0;
 	int score2 = 0;
@@ -111,13 +173,113 @@ int main(void){
 		printf("The score: Player 1 has %d points and ", score1);
 		if (ai) printf("the AI has %d points.\n", score2);
 		else printf("Player 2 has %d points.\n", score2);
-		printf("Would you like to play again? Y/N\n");
-		//scan in
-		//check if valid
+		printf("Would you like to play again? Y/N\n");//y, yes, Y, Yes, n, no, N, No, YES, NO
+		scanf("%s", answer);
+		checkAnswer = strcmp(answer, "Y");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			wantsToPlay = true;
+		}
+		checkAnswer = strcmp(answer, "y");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			wantsToPlay = true;
+		}
+		checkAnswer = strcmp(answer, "Yes");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			wantsToPlay = true;
+		}
+		checkAnswer = strcmp(answer, "YES");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			wantsToPlay = true;
+		}
+		checkAnswer = strcmp(answer, "yes");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			wantsToPlay = true;
+		}
+		checkAnswer = strcmp(answer, "n");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			wantsToPlay = false;
+		}
+		checkAnswer = strcmp(answer, "NO");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			wantsToPlay = false;
+		}
+		checkAnswer = strcmp(answer, "No");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			wantsToPlay = false;
+		}
+		checkAnswer = strcmp(answer, "N");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			wantsToPlay = false;
+		}
+		checkAnswer = strcmp(answer, "no");
+		if (checkAnswer == 0){
+			validAnswer = true;
+			wantsToPlay = false;
+		}
+
+		
 		while(!validAnswer){
 			printf("Sorry, that is not a valid answer. Please try again.\n");
-			//scan in
-			//check
+			scanf("%s", answer);
+			checkAnswer = strcmp(answer, "Y");
+			if (checkAnswer == 0){
+				validAnswer = true;
+				wantsToPlay = true;
+			}
+			checkAnswer = strcmp(answer, "y");
+			if (checkAnswer == 0){
+				validAnswer = true;
+				wantsToPlay = true;
+			}
+			checkAnswer = strcmp(answer, "Yes");
+			if (checkAnswer == 0){
+				validAnswer = true;
+				wantsToPlay = true;
+			}
+			checkAnswer = strcmp(answer, "YES");
+			if (checkAnswer == 0){
+				validAnswer = true;
+				wantsToPlay = true;
+			}
+			checkAnswer = strcmp(answer, "yes");
+			if (checkAnswer == 0){
+				validAnswer = true;
+				wantsToPlay = true;
+			}
+			checkAnswer = strcmp(answer, "n");
+			if (checkAnswer == 0){
+				validAnswer = true;
+				wantsToPlay = false;
+			}
+			checkAnswer = strcmp(answer, "NO");
+			if (checkAnswer == 0){
+				validAnswer = true;
+				wantsToPlay = false;
+			}
+			checkAnswer = strcmp(answer, "No");
+			if (checkAnswer == 0){
+				validAnswer = true;
+				wantsToPlay = false;
+			}
+			checkAnswer = strcmp(answer, "N");
+			if (checkAnswer == 0){
+				validAnswer = true;
+				wantsToPlay = false;
+			}
+			checkAnswer = strcmp(answer, "no");
+			if (checkAnswer == 0){
+				validAnswer = true;
+				wantsToPlay = false;
+			}
 		}
 		//do i need to free the board? hmm
 	}
