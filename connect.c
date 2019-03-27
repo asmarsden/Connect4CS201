@@ -29,87 +29,85 @@ connect 4…
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "connect.h"
 
-int player1Choose(int rows, int cols, int[rows][cols] board){//prompt user for column chosen, then update graph and board, then check for win or full
+int player1Choose(int rows, int cols, int board[rows][cols]){//prompt user for column chosen, then update graph and board, then check for win or full
 	int col = -1;
 	int row = -1;
 	bool validAnswer = false;
-	printf("Which column would player 1 like to place a piece in? Please enter a valid number.\n");
-	scanf("%d", col);
+	printf("\nWhich column would player 1 like to place a piece in? Please enter a valid number.\n");
+	scanf("%d", &col);
+printf("check 1\n");
 	if (col >= 0 && col < rows){
 		if (board[col][rows-1] == -1){
 		validAnswer = true;
 		}
 	}
+printf("check 2\n");
 	while (!validAnswer){
 		printf("That is not a valid column choice, please try again.\n");
-		scanf("%d", col);
+		scanf("%d", &col);
 		if (col >= 0 && col < rows){
 			if (board[col][rows-1] == -1){
 			validAnswer = true;
 			}
 		}
 	}
-	row = findMostRecent(rows, cols, board, col);
-	board[col][row] = 1;
+printf("check 3\n");
+
 	return col;
 }
 
-int player2Choose(int rows, int cols, int[rows][cols] board){//prompt user for column chosen, then update graph and board, then check for win or full
+int player2Choose(int rows, int cols, int board[rows][cols]){//prompt user for column chosen, then update graph and board, then check for win or full
 	int col = -1;
 	int row = -1;
 	bool validAnswer = false;
 	printf("Which column would player 2 like to place a piece in? Please enter a valid number.\n");
-	scanf("%d", col);
+	scanf("%d", &col);
 	if (col >= 0 && col < rows){
 		if (board[col][rows-1] == -1){
 		validAnswer = true;
 		}
 	}
-	if (board[col][rows-1] == -1){
-		validAnswer = true;
-	}
 	while (!validAnswer){
 		printf("That is not a valid column choice, please try again.\n");
-				scanf("%d", col);
+				scanf("%d", &col);
 		if (col >= 0 && col < rows){
 			if (board[col][rows-1] == -1){
 			validAnswer = true;
 			}
 		}
 	}
-	row = findMostRecent(rows, cols, board, col);
-	board[col][row] = 2;
 	return col;
 
 }
 
-int aiChoose(int rows, int cols, int[rows][cols] board, int prevCol){//redirect to function in AI that chooses column, then update, then check
+int aiChoose(int rows, int cols, int board[rows][cols], int prevCol){//redirect to function in AI that chooses column, then update, then check
 	int row = -1;
 	int col = -1;
 	//so somehow this looks at the graph and decides what it wants to do from there. i... dont know how i want to do this.
 	//i could have it randomly select a number between 1 and cols until it finds something valid, with a thing saying like 'if this number... not'
-	int col = prevCol+1;
+	col = prevCol+1;
 	if (col >= cols) col = col-2;
 	while (board[rows-1][col] != -1){
 		col--;
 		if (col<0) col = cols-1;
 	}
 //make this a lot more... in depth later
-	row = findMostRecent(rows, cols, board, col);
-	board[col][row] = 2;
-
 
 	printf("The AI has placed a piece in column %d.\n", col);
 	return col;
 }
 
-bool isWon(int width, int height, int[width][height] board, int column){
-	int row = findRecent(width, height, board, column);//still gotta code this function//think this is done now
-	int count = 1; int player = board[column][row];
-	bool isWon = false; bool broken = false;
-	int i = column; int j = row; 
+bool checkIfWon(int width, int height, int board[width][height], int placed[width], int column){//there is something wrong in the logic of this function. 
+	int row = placed[column]-1;
+	int count = 1; 
+	int player = board[column][row];
+	bool isWon = false; 
+	bool broken = false;
+	int i = column; 
+	int j = row; 
 	while (!broken){//upleft
 		if (i-1<0) {broken = true; break;}
 		if (j+1>=height) {broken = true; break;}
@@ -140,7 +138,7 @@ bool isWon(int width, int height, int[width][height] board, int column){
 	while (!broken){//upright
 		if (i+1>=width) {broken = true; break;}
 		if (j+1>=height) {broken = true; break;}
-		if (board[i-1][j+1] == player){
+		if (board[i+1][j+1] == player){
 			count++; i++; j++;
 		}
 		else if (board[i+1][j+1] != player){broken = true; break;}
@@ -152,7 +150,7 @@ bool isWon(int width, int height, int[width][height] board, int column){
 	while (!broken){//downleft
 		if (j-1<0) {broken = true; break;}
 		if (i-1<0) {broken = true; break;}
-		if (board[i+1][j-1] == player){
+		if (board[i-1][j-1] == player){
 			count++; i--; j--;
 		}
 		else if (board[i-1][j-1] != player){broken = true; break;}
@@ -177,7 +175,7 @@ bool isWon(int width, int height, int[width][height] board, int column){
 	broken = false;
 	while (!broken){//right
 		if (i+1>=width) {broken = true; break;}
-		if (board[i+1][j] == player){
+		else if (board[i+1][j] == player){
 			count++; i++; 
 		}
 		else if (board[i+1][j] != player){broken = true; break;}
@@ -187,6 +185,7 @@ bool isWon(int width, int height, int[width][height] board, int column){
 	j = row;
 	broken = false;
 	count = 1;
+
 	while (!broken){//down
 		if (j-1<0) {broken = true; break;}
 		if (board[i][j-1] == player){
@@ -198,32 +197,12 @@ bool isWon(int width, int height, int[width][height] board, int column){
 	return false;
 
 }
-
-int findMostRecent(int width, int height, int[width][height], int column){
-	int i = 1;
-	int check = -1;
-	if (board[column][height-1] != -1){
-		return height-1;
-	}
-	while(check == -1){
-		i++;
-		check = board[column][(height-1)/i];
-	}
-	int h = (height-1)/i;
-	while (check !=-1){
-		h++;
-		check = board[column][h];
-	}
-	return h-1;
-}
 	
-
-
-
 
 /* 
 alright so change of plans. we will have a matrix that holds where each piece is, and another matrix that is an adjacency matrix... so maybe... 
 a matrix for individual pieces (-1 for none, 1 for player 1, 2 for player 2, 3 for ai)
 then two matrices that just show like. individual pieces? maybe? hmm
 also i think ill go with an ascii interface just because i dont wanna Fight with something. it needs to open an .exe though i think which is gonna suck
-also also. i need to have the program run some sort of thing on a graph to decide what to do next. ugh
+also also. i need to have the program run some sort of thing on a graph to decide what to do next. ugh*/ 
+

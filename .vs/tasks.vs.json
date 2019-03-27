@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskName": "task-connect",
+      "appliesTo": "connect.c",
+      "type": "launch"
+    }
+  ]
+}
