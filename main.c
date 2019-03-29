@@ -114,6 +114,8 @@ int main(void){
 		}
 	}
 	validAnswer = false;
+
+/*
 	printf("Very well. What size would you like the board to be? Please enter in format #x#. \nNote that board sizes over 40x40 may not function as intended, and board sizes under 4x4 are disabled.\n");
 	int tall = -1;
 	int wide = -1;
@@ -134,6 +136,42 @@ int main(void){
 		}
 	}
 	validAnswer = false;
+*/
+	printf("Very well. How wide would you like the board to be? Please enter a valid integer.\nNote that input over 40 may not function as intended, and under 4 is disabled.\n");
+	int tall;
+	int wide;
+	scanf("%d", &wide);
+	while(getchar() != '\n');
+	if (wide>3){
+		validAnswer = true;
+	}
+	while(!validAnswer){
+		printf("Sorry, that isn't a valid answer. Please try again.\n");
+		scanf("%d", &wide);
+		while(getchar() != '\n');   
+		if (wide>3){
+			validAnswer = true;
+		}
+	}
+	validAnswer = false;
+	printf("And how tall would you like the board to be? The same warnings and restrictions apply.\n");
+	scanf("%d", &tall);
+	while(getchar() != '\n');   
+	if (tall>3){
+		validAnswer = true;
+	}
+	while(!validAnswer){
+		printf("Sorry, that isn't a valid answer. Please try again.\n");
+		scanf("%d", &tall);
+		while(getchar() != '\n');   
+		if (tall>3){
+			validAnswer = true;
+		}
+	}
+	validAnswer = false;
+
+	//so we have an issue in that if they input a character, the program just Dies. and idk how to fix that.
+
 	bool wantsToPlay = true;
 	int score1 = 0;
 	int score2 = 0;
@@ -188,8 +226,8 @@ int main(void){
 			piecesPlaced++;
 			placed[currentCol]++;
 			fourConnected = checkIfWon(wide, tall, board, placed, currentCol);
-			if (fourConnected) {gameFinished = true; playerWon = player; break;}
-			if (piecesPlaced >= boardSize) {gameFinished = true; playerWon = 0;}
+			if (fourConnected) {printBoard(wide, tall, board);  gameFinished = true; playerWon = player; break;}
+			if (piecesPlaced >= boardSize) {printBoard(wide, tall, board);  gameFinished = true; playerWon = 0;}
 		}
 		if (playerWon == 0) {printf("The board has been filled and no one scored a point.\n");}
 		if (playerWon == 1) score1++;

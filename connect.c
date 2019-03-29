@@ -10,6 +10,7 @@ int player1Choose(int cols, int rows, int board[cols][rows]){//this prompts play
 	bool validAnswer = false;
 	printf("\nWhich column would player 1 like to place a piece in? Please enter a valid number.\n");
 	scanf("%d", &col);
+	while(getchar() != '\n');   
 	if (col >= 0 && col < cols){
 		if (board[col][rows-1] == -1){
 		validAnswer = true;
@@ -18,11 +19,13 @@ int player1Choose(int cols, int rows, int board[cols][rows]){//this prompts play
 	while (!validAnswer){
 		printf("That is not a valid column choice, please try again.\n");
 		scanf("%d", &col);
+		while(getchar() != '\n');   
 		if (col >= 0 && col < cols){
 			if (board[col][rows-1] == -1){
 			validAnswer = true;
 			}
 		}
+	}
 	return col;
 }
 
@@ -31,6 +34,7 @@ int player2Choose(int cols, int rows, int board[cols][rows]){//almost the exact 
 	bool validAnswer = false;
 	printf("Which column would player 2 like to place a piece in? Please enter a valid number.\n");
 	scanf("%d", &col);
+	while(getchar() != '\n');   
 	if (col >= 0 && col < cols){
 		if (board[col][rows-1] == -1){
 		validAnswer = true;
@@ -39,6 +43,7 @@ int player2Choose(int cols, int rows, int board[cols][rows]){//almost the exact 
 	while (!validAnswer){
 		printf("That is not a valid column choice, please try again.\n");
 				scanf("%d", &col);
+				while(getchar() != '\n');   
 		if (col >= 0 && col < cols){
 			if (board[col][rows-1] == -1){
 			validAnswer = true;
@@ -183,8 +188,6 @@ int aiHelper(int width, int height, int board[width][height], int col, int row){
 	j = row;
 	broken = false;
 	count = 1;	
-
-
 	while (!broken){//upright
 		if (i+1>=width) {broken = true; break;}
 		if (j+1>=height) {broken = true; break;}
@@ -210,8 +213,6 @@ int aiHelper(int width, int height, int board[width][height], int col, int row){
 	j = row;
 	broken = false;
 	count = 1;
-
-
 	while (!broken){//left
 		if (i-1<0) {broken = true; break;}
 		if (board[i-1][j] == 1){
@@ -235,7 +236,6 @@ int aiHelper(int width, int height, int board[width][height], int col, int row){
 	j = row;
 	broken = false;
 	count = 1;
-
 	while (!broken){//down
 		if (j-1<0) {broken = true; break;}
 		if (board[i][j-1] == 1){
@@ -245,7 +245,6 @@ int aiHelper(int width, int height, int board[width][height], int col, int row){
 		if (count>=3) {return i;}
 	}
 	//return i;
-
 	while (!broken){//upleft
 		if (i-1<0) {broken = true; break;}
 		if (j+1>=height) {broken = true; break;}
@@ -271,8 +270,6 @@ int aiHelper(int width, int height, int board[width][height], int col, int row){
 	j = row;
 	broken = false;
 	count = 1;	
-
-
 	while (!broken){//upright
 		if (i+1>=width) {broken = true; break;}
 		if (j+1>=height) {broken = true; break;}
@@ -298,8 +295,6 @@ int aiHelper(int width, int height, int board[width][height], int col, int row){
 	j = row;
 	broken = false;
 	count = 1;
-
-
 	while (!broken){//left
 		if (i-1<0) {broken = true; break;}
 		if (board[i-1][j] == 1){
@@ -323,7 +318,6 @@ int aiHelper(int width, int height, int board[width][height], int col, int row){
 	j = row;
 	broken = false;
 	count = 1;
-
 	while (!broken){//down
 		if (j-1<0) {broken = true; break;}
 		if (board[i][j-1] == 1){
@@ -337,7 +331,7 @@ int aiHelper(int width, int height, int board[width][height], int col, int row){
 	if (col > col/2){//the idea for this is to put the piece as close to the middle as possible while still interfering with the placed piece from player 1. 
 		return col-1; 
 	}
-return col+1;
+	return col+1;
 }
 
 
