@@ -1,24 +1,5 @@
-/*sets scores to 0 just for safety measure
-prompts user for type of game (vs ai or vs other person), then sets the proper variable to 2 or 3
-start a loop type thing here that breaks if player doesnt want to play anymore
-prompts user for board size, checks if valid, then sends that to createBoard (or just initializes it in here? hmm. yeah just initialize
- it in here)
-once everythings set, it enters a loop (while (connect4 == false && full == false) (if either of those == true then it breaks)
-call player1choose
-call player1placed
-call checkifWon
-call checkifFull (could just check within main)
-call player2 or aichoose
-call player2 or aiplaced
-call checkifWon
-call checkifFull (could just check within main)
-repeat
-
-if full == true then its a draw
-if not, then there are two variables for scores that get updated
-prompt if player would like to play again
-if yes, do not erase scores
-if not, erase scores then goto start of program somehow
+/*
+I sincerely apologize for how ugly and redundant this code is. it was worse. this is an improvement.
 */
 
 #include <stdio.h>
@@ -27,7 +8,7 @@ if not, erase scores then goto start of program somehow
 #include <stdbool.h>
 #include "connect.h"
 
-void printBoard(int cols, int rows, int board[cols][rows]){
+void printBoard(int cols, int rows, int board[cols][rows]){//the board is ugly, but it works. i think the printing of the board is what takes the most time.
 	system("clear");
 	int i = 0; int j = 0;
 	for (j = 0; j < cols; j++){
@@ -50,11 +31,9 @@ void printBoard(int cols, int rows, int board[cols][rows]){
 		printf(" _");
 	}
 	return;
-}//this is gonna need a lot of adjustment but for now it does the job. 
+}
 
 int main(void){
-	int player1score = 0;
-	int player2score = 0;
 	bool validAnswer = false;
 	bool ai = false;
 	bool alone = false;
@@ -96,8 +75,6 @@ int main(void){
 		validAnswer = true;
 		alone = true;
 	}
-	
-	
 	while(!validAnswer){
 		printf("Sorry, that isn't a valid answer. Please try again.\n");
 		//scan in answer
@@ -135,7 +112,6 @@ int main(void){
 			validAnswer = true;
 			alone = true;
 		}
-	
 	}
 	validAnswer = false;
 	printf("Very well. What size would you like the board to be? Please enter in format #x#. \nNote that board sizes over 40x40 may not function as intended, and board sizes under 4x4 are disabled.\n");
@@ -158,36 +134,29 @@ int main(void){
 		}
 	}
 	validAnswer = false;
-
 	bool wantsToPlay = true;
 	int score1 = 0;
 	int score2 = 0;
 	bool gameFinished = false;
 	bool fourConnected = false;
-	bool isWon = false;
-	bool boardFilled = false;
 	int piecesPlaced = 0;
-
 	while (wantsToPlay){
-printf("main check 11\n");
 		int board[wide][tall];
+				int i, j;
 		int placed[wide];
-		int i, j;
 		for (i = 0; i < wide; i++){
 			for (j = 0; j < tall; j++){
 				board[i][j] = -1;
 			}
 			placed[i] = 0;
 		}
-printf("main check 12\n");
 		gameFinished = false;
 		fourConnected = false;
-		boardFilled = false;
 		piecesPlaced = 0;
 		int boardSize = tall * wide;
-		int playerWon = 0; //0 for not won yet, 1 for player 1, 2 for player 2, 3 forr AI;
+		int playerWon = 0; //0 for not won yet, 1 for player 1, 2 for player 2 or ai
 		int player = 2;
-		int currentCol = -1;   printf("main check 13\n");
+		int currentCol = -1;  
 		int currentRow = -1;
 		while (!gameFinished){
 			if (player == 1){
@@ -197,18 +166,15 @@ printf("main check 12\n");
 			if (alone){
 				player = 1;
 			}
-
-			printBoard(wide, tall, board);   printf("main check 14\n");
-			
+			printBoard(wide, tall, board);  
 			if (player == 1){
 				currentCol = player1Choose(wide, tall, board);
 				currentRow = placed[currentCol];
 				board[currentCol][currentRow] = 1;
-
-			}   printf("main check 15\n");
+			}   
 			if (player == 2){
 				if (ai){
-					currentCol = aiChoose(wide, tall, board, currentCol);
+					currentCol = aiChoose(wide, tall, board, placed, currentCol);
 					currentRow = placed[currentCol];
 					board[currentCol][currentRow] = 2;
 				}
@@ -217,25 +183,27 @@ printf("main check 12\n");
 					currentRow = placed[currentCol];
 					board[currentCol][currentRow] = 2;
 				}
-				
-			}   printf("main check 16\n");
-printf("placing a piece for %d in row %d and column %d\n", player, currentRow, currentCol);
+			}
+//printf("placing a piece for %d in row %d and column %d\n", player, currentRow, currentCol); //keeping this here for future debugging, just in case
 			piecesPlaced++;
 			placed[currentCol]++;
 			fourConnected = checkIfWon(wide, tall, board, placed, currentCol);
 			if (fourConnected) {gameFinished = true; playerWon = player; break;}
-printf("main check 17\n");
-			if (piecesPlaced >= boardSize) {boardFilled = true; gameFinished = true; playerWon = 0;}
+			if (piecesPlaced >= boardSize) {gameFinished = true; playerWon = 0;}
 		}
-
 		if (playerWon == 0) {printf("The board has been filled and no one scored a point.\n");}
 		if (playerWon == 1) score1++;
 		if (playerWon == 2) score2++;
-		printf("The score: Player 1 has %d points and ", score1);
-		if (ai) printf("the AI has %d points.\n", score2);
-		else printf("Player 2 has %d points.\n", score2);
-		printf("Would you like to play again? Y/N\n");//y, yes, Y, Yes, n, no, N, No, YES, NO
-		scanf("%s", answer);//do i need & here? not sure. apparently not
+		if (alone){
+			printf("Congratulations, you have played %d time(s).\n", score1);
+		}
+		else{
+			printf("The score: Player 1 has %d point(s) and ", score1);
+			if (ai) printf("the AI has %d point(s).\n", score2);
+			else printf("Player 2 has %d point(s).\n", score2);
+		}
+		printf("Would you like to play again? Y/N\n");//y, yes, Y, Yes, n, no, N, No, YES, NO. why did i decide to take in input this way this is so redundant
+		scanf("%s", answer);
 		checkAnswer = strcmp(answer, "Y");
 		if (checkAnswer == 0){
 			validAnswer = true;
@@ -286,8 +254,6 @@ printf("main check 17\n");
 			validAnswer = true;
 			wantsToPlay = false;
 		}
-
-		
 		while(!validAnswer){
 			printf("Sorry, that is not a valid answer. Please try again.\n");
 			scanf("%s", answer);
@@ -342,8 +308,8 @@ printf("main check 17\n");
 				wantsToPlay = false;
 			}
 		}
-		//do i need to free the board? hmm
 	}
+	printf("Hope you enjoyed playing!\n");
 	return 0;
 }
 

@@ -1,30 +1,3 @@
-/*createBoard: generates an x by y int array, all initialized to 0.
-	createGraph: generates an empty graph-- will I need this?
-	player1Choose: this is a basic ‘prompt for column’ thing, then returns the int regarding the column, after checking that its valid 
-	(in bounds, not full). will repeatedly ask until it gets a valid column.
-	player2Choose: same as player1Choose.
-	aiChoose: this transfers over to the AI program, which will have all Sorts of functions to figure this out. after that, 
-	it returns to this the column, then this function returns the column to aiPlaced. 
-	player1Placed: after a different function gets the  location to place the piece, this function takes the column chosen (0 thru x)
-	 and places it in the next available slot in the array. maybe do a linear search to find the end piece? that should cut down 
-	 on time instead of just check-check-check. anyway, it updates that slot in the int array, then creates a node with the proper 
-	 information, found from the array, and places it in the graph. whats gonna Suck is getting all the pointers pointed to it properly. 
-	player2Placed: this is the same as player1placed but it initializes the proper variables to 2 instead of 1.
-	aiPlaced: pretty much the same, but using 3 instead of 2 or 1, and the AI generated the column, not a human. 
-	checkIfWon: after each piece is placed, check to see if the piece generated a connect-4. this is gonna be a bit hard to code
-	 just due to the sheer number of possibilities, but there are 5 cases:
-piece does not create connect4
-piece is 1st in a connect4
-piece is 2nd in a connect4
-piece is 3rd in a connect4
-piece is 4th in a connect4
-1 and 4 will be coded the same and 2 and 3 will be coded the same, but 2 and 3 will take some extra checking. basically, break out 
-of the function and return true if one is found, if not, return false. hopefully i wont need to return the 4+ nodes that make up a 
-connect 4… 
-	checkIfFull: after each piece is placed, check to see if number of pieces placed == x * y. just to make sure the board isnt 
-	completely full
-	
-*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,40 +5,33 @@ connect 4…
 #include <stdbool.h>
 #include "connect.h"
 
-int player1Choose(int rows, int cols, int board[rows][cols]){//prompt user for column chosen, then update graph and board, then check for win or full
+int player1Choose(int cols, int rows, int board[cols][rows]){//this prompts player 1 for the column to place a piece in. the main function handles all changes to the board
 	int col = -1;
-	int row = -1;
 	bool validAnswer = false;
 	printf("\nWhich column would player 1 like to place a piece in? Please enter a valid number.\n");
 	scanf("%d", &col);
-printf("check 1\n");
-	if (col >= 0 && col < rows){
+	if (col >= 0 && col < cols){
 		if (board[col][rows-1] == -1){
 		validAnswer = true;
 		}
 	}
-printf("check 2\n");
 	while (!validAnswer){
 		printf("That is not a valid column choice, please try again.\n");
 		scanf("%d", &col);
-		if (col >= 0 && col < rows){
+		if (col >= 0 && col < cols){
 			if (board[col][rows-1] == -1){
 			validAnswer = true;
 			}
 		}
-	}
-printf("check 3\n");
-
 	return col;
 }
 
-int player2Choose(int rows, int cols, int board[rows][cols]){//prompt user for column chosen, then update graph and board, then check for win or full
+int player2Choose(int cols, int rows, int board[cols][rows]){//almost the exact same as player1choose. but I like having these seperate.
 	int col = -1;
-	int row = -1;
 	bool validAnswer = false;
 	printf("Which column would player 2 like to place a piece in? Please enter a valid number.\n");
 	scanf("%d", &col);
-	if (col >= 0 && col < rows){
+	if (col >= 0 && col < cols){
 		if (board[col][rows-1] == -1){
 		validAnswer = true;
 		}
@@ -73,38 +39,33 @@ int player2Choose(int rows, int cols, int board[rows][cols]){//prompt user for c
 	while (!validAnswer){
 		printf("That is not a valid column choice, please try again.\n");
 				scanf("%d", &col);
-		if (col >= 0 && col < rows){
+		if (col >= 0 && col < cols){
 			if (board[col][rows-1] == -1){
 			validAnswer = true;
 			}
 		}
 	}
 	return col;
-
 }
 
-int aiChoose(int rows, int cols, int board[rows][cols], int prevCol){//redirect to function in AI that chooses column, then update, then check
-	int row = -1;
+int aiChoose(int cols, int rows, int board[cols][rows], int placed[cols], int prevCol){//this uses an algorithm to decide the next place to put a piece.
 	int col = -1;
-	//so somehow this looks at the graph and decides what it wants to do from there. i... dont know how i want to do this.
-	//i could have it randomly select a number between 1 and cols until it finds something valid, with a thing saying like 'if this number... not'
-	col = prevCol+1;
-	if (col >= cols) col = col-2;
-	while (board[rows-1][col] != -1){
+	int prevRow = placed[prevCol];
+	col = aiHelper(cols, rows, board, prevCol, prevRow); //this function just returns the column that would potentially block the next item.
+	if (col >= cols) col = cols-1;
+	while (board[col][rows-1] != -1){//this is just to make sure its not placing a piece out of bounds. 
 		col--;
 		if (col<0) col = cols-1;
 	}
-//make this a lot more... in depth later
-
-	printf("The AI has placed a piece in column %d.\n", col);
+	printf("The AI has placed a piece in column %d.\n", col);//this just tells the user where the AI has placed a piece. its helpful for debugging.
 	return col;
 }
 
-bool checkIfWon(int width, int height, int board[width][height], int placed[width], int column){//there is something wrong in the logic of this function. 
+bool checkIfWon(int width, int height, int board[width][height], int placed[width], int column){//this checks if someone has won.
+	//it only checks the most recently placed piece, since its impossible to have won without the win relating to the recently placed piece.
 	int row = placed[column]-1;
 	int count = 1; 
 	int player = board[column][row];
-	bool isWon = false; 
 	bool broken = false;
 	int i = column; 
 	int j = row; 
@@ -133,8 +94,6 @@ bool checkIfWon(int width, int height, int board[width][height], int placed[widt
 	j = row;
 	broken = false;
 	count = 1;	
-
-
 	while (!broken){//upright
 		if (i+1>=width) {broken = true; break;}
 		if (j+1>=height) {broken = true; break;}
@@ -160,8 +119,6 @@ bool checkIfWon(int width, int height, int board[width][height], int placed[widt
 	j = row;
 	broken = false;
 	count = 1;
-
-
 	while (!broken){//left
 		if (i-1<0) {broken = true; break;}
 		if (board[i-1][j] == player){
@@ -185,7 +142,6 @@ bool checkIfWon(int width, int height, int board[width][height], int placed[widt
 	j = row;
 	broken = false;
 	count = 1;
-
 	while (!broken){//down
 		if (j-1<0) {broken = true; break;}
 		if (board[i][j-1] == player){
@@ -195,14 +151,193 @@ bool checkIfWon(int width, int height, int board[width][height], int placed[widt
 		if (count>=4) {return true;}
 	}
 	return false;
-
 }
-	
 
-/* 
-alright so change of plans. we will have a matrix that holds where each piece is, and another matrix that is an adjacency matrix... so maybe... 
-a matrix for individual pieces (-1 for none, 1 for player 1, 2 for player 2, 3 for ai)
-then two matrices that just show like. individual pieces? maybe? hmm
-also i think ill go with an ascii interface just because i dont wanna Fight with something. it needs to open an .exe though i think which is gonna suck
-also also. i need to have the program run some sort of thing on a graph to decide what to do next. ugh*/ 
+int aiHelper(int width, int height, int board[width][height], int col, int row){//this is based off of my checkifwon function, but used for the AI
+	int count = 1; 
+	bool broken = false;
+	int i = col; 
+	int j = row; 
+	while (!broken){//upleft
+		if (i-1<0) {broken = true; break;}
+		if (j+1>=height) {broken = true; break;}
+		if (board[i-1][j+1] == 1){
+			count++; i--; j++;
+		}
+		else if (board[i-1][j+1] != 1){broken = true; break;}
+		if (count>=3) {return i-1;}
+	}
+	i = col;
+	j = row;
+	broken = false;
+	while (!broken){//downright
+		if (j-1<0) {broken = true; break;}
+		if (i+1>=width) {broken = true; break;}
+		if (board[i+1][j-1] == 1){
+			count++; i++; j--;
+		}
+		else if (board[i+1][j-1] != 1){broken = true; break;}
+		if (count>=3) {return i+1;}
+	}
+	i = col;
+	j = row;
+	broken = false;
+	count = 1;	
+
+
+	while (!broken){//upright
+		if (i+1>=width) {broken = true; break;}
+		if (j+1>=height) {broken = true; break;}
+		if (board[i+1][j+1] == 1){
+			count++; i++; j++;
+		}
+		else if (board[i+1][j+1] != 1){broken = true; break;}
+		if (count>=3) {return i+1;}
+	}
+	i = col;
+	j = row;
+	broken = false;
+	while (!broken){//downleft
+		if (j-1<0) {broken = true; break;}
+		if (i-1<0) {broken = true; break;}
+		if (board[i-1][j-1] == 1){
+			count++; i--; j--;
+		}
+		else if (board[i-1][j-1] != 1){broken = true; break;}
+		if (count>=3) {return i-1;}
+	}
+	i = col;
+	j = row;
+	broken = false;
+	count = 1;
+
+
+	while (!broken){//left
+		if (i-1<0) {broken = true; break;}
+		if (board[i-1][j] == 1){
+			count++; i--; 
+		}
+		else if (board[i-1][j] != 1){broken = true; break;}
+		if (count>=3) {return i-1;}
+	}
+	i = col;
+	j = row;
+	broken = false;
+	while (!broken){//right
+		if (i+1>=width) {broken = true; break;}
+		if (board[i+1][j] == 1){
+			count++; i++; 
+		}
+		else if (board[i+1][j] != 1){broken = true; break;}
+		if (count>=3) {return i+1;}
+	}
+	i = col;
+	j = row;
+	broken = false;
+	count = 1;
+
+	while (!broken){//down
+		if (j-1<0) {broken = true; break;}
+		if (board[i][j-1] == 1){
+			count++; j--;
+		}
+		else if (board[i][j-1] != 1){broken = true; break;}
+		if (count>=3) {return i;}
+	}
+	//return i;
+
+	while (!broken){//upleft
+		if (i-1<0) {broken = true; break;}
+		if (j+1>=height) {broken = true; break;}
+		if (board[i-1][j+1] == 1){
+			count++; i--; j++;
+		}
+		else if (board[i-1][j+1] != 1){broken = true; break;}
+		if (count>=2) {return i-1;}
+	}
+	i = col;
+	j = row;
+	broken = false;
+	while (!broken){//downright
+		if (j-1<0) {broken = true; break;}
+		if (i+1>=width) {broken = true; break;}
+		if (board[i+1][j-1] == 1){
+			count++; i++; j--;
+		}
+		else if (board[i+1][j-1] != 1){broken = true; break;}
+		if (count>=2) {return i+1;}
+	}
+	i = col;
+	j = row;
+	broken = false;
+	count = 1;	
+
+
+	while (!broken){//upright
+		if (i+1>=width) {broken = true; break;}
+		if (j+1>=height) {broken = true; break;}
+		if (board[i+1][j+1] == 1){
+			count++; i++; j++;
+		}
+		else if (board[i+1][j+1] != 1){broken = true; break;}
+		if (count>=2) {return i+1;}
+	}
+	i = col;
+	j = row;
+	broken = false;
+	while (!broken){//downleft
+		if (j-1<0) {broken = true; break;}
+		if (i-1<0) {broken = true; break;}
+		if (board[i-1][j-1] == 1){
+			count++; i--; j--;
+		}
+		else if (board[i-1][j-1] != 1){broken = true; break;}
+		if (count>=2) {return i-1;}
+	}
+	i = col;
+	j = row;
+	broken = false;
+	count = 1;
+
+
+	while (!broken){//left
+		if (i-1<0) {broken = true; break;}
+		if (board[i-1][j] == 1){
+			count++; i--; 
+		}
+		else if (board[i-1][j] != 1){broken = true; break;}
+		if (count>=2) {return i-1;}
+	}
+	i = col;
+	j = row;
+	broken = false;
+	while (!broken){//right
+		if (i+1>=width) {broken = true; break;}
+		if (board[i+1][j] == 1){
+			count++; i++; 
+		}
+		else if (board[i+1][j] != 1){broken = true; break;}
+		if (count>=2) {return i+1;}
+	}
+	i = col;
+	j = row;
+	broken = false;
+	count = 1;
+
+	while (!broken){//down
+		if (j-1<0) {broken = true; break;}
+		if (board[i][j-1] == 1){
+			count++; j--;
+		}
+		else if (board[i][j-1] != 1){broken = true; break;}
+		if (count>=2) {return i;}
+	}
+
+	//if it has reached this point, then theres only one piece in a row. 
+	if (col > col/2){//the idea for this is to put the piece as close to the middle as possible while still interfering with the placed piece from player 1. 
+		return col-1; 
+	}
+return col+1;
+}
+
 
