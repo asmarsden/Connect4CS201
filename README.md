@@ -7,7 +7,7 @@ The game keeps track of score in game, but does not save that score anywhere for
 The board itself was implemented using a 2d integer array. This is an unconvential way of implementing a graph, but in order to implement the graph of the board in a traditional manner, the program would lose speed and take up more space, and while trying to add a traditionally implemented graph regardless, I found that having the integer array helped anyway. All of the information needed for this to function properly could be held in that array, so I found no reason to make the program slower.
 Currently, the array is a simple 2d integer array, not using pointers or anything. I have noted that large board sizes cause a segmentation fault simply because the game runs out of space for the board; while a connect 4 game of 10000x10000 is gigantic and I personally doubt anyone would enjoy playing it, and the larger the board size the worse it displays, this is something I am going to fix if I have the time by changing the array so that it is allocated on the heap instead of the stack.  
 
-URL of video on how to run this program: 
+URL of video on how to run this program: https://youtu.be/4_PLtY5cagE
 
 Step by step guide on how to run this program: 
 Download the main.c, connect.c, connect.h, and makefile files into a new folder within your terminal. 
@@ -28,3 +28,4 @@ board size 4x10
 board size 10x4
 board size 100x100
 board size 1000x1000
+inputting incorrect input in all possible chances to input

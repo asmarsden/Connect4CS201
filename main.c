@@ -115,28 +115,6 @@ int main(void){
 	}
 	validAnswer = false;
 
-/*
-	printf("Very well. What size would you like the board to be? Please enter in format #x#. \nNote that board sizes over 40x40 may not function as intended, and board sizes under 4x4 are disabled.\n");
-	int tall = -1;
-	int wide = -1;
-	char placeholder;
-	scanf("%d", &wide);
-	scanf("%c", &placeholder);
-	scanf("%d", &tall);
-	if (wide > 3 && tall > 3){
-		validAnswer = true;
-	}
-	while (!validAnswer){
-		printf("Sorry, that isn't a valid answer. Please try again.\n");
-		scanf("%d", &wide);
-		scanf("%c", &placeholder);
-		scanf("%d", &tall);
-		if (wide > 3 && tall > 3){
-			validAnswer = true;
-		}
-	}
-	validAnswer = false;
-*/
 	printf("Very well. How wide would you like the board to be? Please enter a valid integer.\nNote that input over 40 may not function as intended, and under 4 is disabled.\n");
 	int tall;
 	int wide;
@@ -169,8 +147,6 @@ int main(void){
 		}
 	}
 	validAnswer = false;
-
-	//so we have an issue in that if they input a character, the program just Dies. and idk how to fix that.
 
 	bool wantsToPlay = true;
 	int score1 = 0;
@@ -229,14 +205,14 @@ int main(void){
 			if (fourConnected) {printBoard(wide, tall, board);  gameFinished = true; playerWon = player; break;}
 			if (piecesPlaced >= boardSize) {printBoard(wide, tall, board);  gameFinished = true; playerWon = 0;}
 		}
-		if (playerWon == 0) {printf("The board has been filled and no one scored a point.\n");}
+		if (playerWon == 0) {printf("\nThe board has been filled and no one scored a point.\n");}
 		if (playerWon == 1) score1++;
 		if (playerWon == 2) score2++;
 		if (alone){
-			printf("Congratulations, you have played %d time(s).\n", score1);
+			printf("\nCongratulations, you have played %d time(s).\n", score1);
 		}
 		else{
-			printf("The score: Player 1 has %d point(s) and ", score1);
+			printf("\nThe score: Player 1 has %d point(s) and ", score1);
 			if (ai) printf("the AI has %d point(s).\n", score2);
 			else printf("Player 2 has %d point(s).\n", score2);
 		}

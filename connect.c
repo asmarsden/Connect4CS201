@@ -32,7 +32,7 @@ int player1Choose(int cols, int rows, int board[cols][rows]){//this prompts play
 int player2Choose(int cols, int rows, int board[cols][rows]){//almost the exact same as player1choose. but I like having these seperate.
 	int col = -1;
 	bool validAnswer = false;
-	printf("Which column would player 2 like to place a piece in? Please enter a valid number.\n");
+	printf("\nWhich column would player 2 like to place a piece in? Please enter a valid number.\n");
 	scanf("%d", &col);
 	while(getchar() != '\n');   
 	if (col >= 0 && col < cols){
@@ -62,7 +62,7 @@ int aiChoose(int cols, int rows, int board[cols][rows], int placed[cols], int pr
 		col--;
 		if (col<0) col = cols-1;
 	}
-	printf("The AI has placed a piece in column %d.\n", col);//this just tells the user where the AI has placed a piece. its helpful for debugging.
+	printf("\nThe AI has placed a piece in column %d.\n", col);//this just tells the user where the AI has placed a piece. its helpful for debugging.
 	return col;
 }
 
