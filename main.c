@@ -211,9 +211,7 @@ printf("placing a piece for %d in row %d and column %d\n", player, currentRow, c
 			if (fourConnected) {printBoard(wide, tall, board);  gameFinished = true; playerWon = player; break;}
 			if (piecesPlaced >= boardSize) {printBoard(wide, tall, board);  gameFinished = true; playerWon = 0;}
 		}
-			/*for (i = 0; i < wide; i++){
-			free(board[i]);
-			}free (board);*/
+
 		if (playerWon == 0) {printf("\nThe board has been filled and no one scored a point.\n");}
 		if (playerWon == 1) score1++;
 		if (playerWon == 2) score2++;
@@ -225,6 +223,7 @@ printf("placing a piece for %d in row %d and column %d\n", player, currentRow, c
 			if (ai) printf("the AI has %d point(s).\n", score2);
 			else printf("Player 2 has %d point(s).\n", score2);
 		}
+		validAnswer = false;
 		printf("Would you like to play again? Y/N\n");//y, yes, Y, Yes, n, no, N, No, YES, NO. why did i decide to take in input this way this is so redundant
 		scanf("%s", answer);
 		checkAnswer = strcmp(answer, "Y");
