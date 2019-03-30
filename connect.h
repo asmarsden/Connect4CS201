@@ -3,8 +3,8 @@
 #include <string.h>
 #include <stdbool.h>
 
-int player1Choose(int cols, int rows, int board[cols][rows]);
-int player2Choose(int cols, int rows, int board[cols][rows]);
-int aiChoose(int cols, int rows, int board[cols][rows], int placed[cols], int prevCol);
-bool checkIfWon(int width, int height, int board[width][height], int placed[width], int column);
-int aiHelper(int width, int height, int board[width][height], int col, int row);
+int player1Choose(int cols, int rows, int** board);
+int player2Choose(int cols, int rows, int** board);
+int aiChoose(int cols, int rows, int** board, int* placed, int prevCol);
+bool checkIfWon(int width, int height, int** board, int* placed, int column);
+int aiHelper(int width, int height, int** board, int col, int row);

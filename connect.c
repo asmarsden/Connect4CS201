@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include "connect.h"
 
-int player1Choose(int cols, int rows, int board[cols][rows]){//this prompts player 1 for the column to place a piece in. the main function handles all changes to the board
+int player1Choose(int cols, int rows, int** board){//this prompts player 1 for the column to place a piece in. the main function handles all changes to the board
 	int col = -1;
 	bool validAnswer = false;
 	printf("\nWhich column would player 1 like to place a piece in? Please enter a valid number.\n");
@@ -29,7 +29,7 @@ int player1Choose(int cols, int rows, int board[cols][rows]){//this prompts play
 	return col;
 }
 
-int player2Choose(int cols, int rows, int board[cols][rows]){//almost the exact same as player1choose. but I like having these seperate.
+int player2Choose(int cols, int rows, int** board){//almost the exact same as player1choose. but I like having these seperate.
 	int col = -1;
 	bool validAnswer = false;
 	printf("\nWhich column would player 2 like to place a piece in? Please enter a valid number.\n");
@@ -53,7 +53,7 @@ int player2Choose(int cols, int rows, int board[cols][rows]){//almost the exact 
 	return col;
 }
 
-int aiChoose(int cols, int rows, int board[cols][rows], int placed[cols], int prevCol){//this uses an algorithm to decide the next place to put a piece.
+int aiChoose(int cols, int rows, int** board, int* placed, int prevCol){//this uses an algorithm to decide the next place to put a piece.
 	int col = -1;
 	int prevRow = placed[prevCol];
 	col = aiHelper(cols, rows, board, prevCol, prevRow); //this function just returns the column that would potentially block the next item.
@@ -66,7 +66,7 @@ int aiChoose(int cols, int rows, int board[cols][rows], int placed[cols], int pr
 	return col;
 }
 
-bool checkIfWon(int width, int height, int board[width][height], int placed[width], int column){//this checks if someone has won.
+bool checkIfWon(int width, int height, int** board, int* placed, int column){//this checks if someone has won.
 	//it only checks the most recently placed piece, since its impossible to have won without the win relating to the recently placed piece.
 	int row = placed[column]-1;
 	int count = 1; 
@@ -158,7 +158,7 @@ bool checkIfWon(int width, int height, int board[width][height], int placed[widt
 	return false;
 }
 
-int aiHelper(int width, int height, int board[width][height], int col, int row){//this is based off of my checkifwon function, but used for the AI
+int aiHelper(int width, int height, int** board, int col, int row){//this is based off of my checkifwon function, but used for the AI
 	int count = 1; 
 	bool broken = false;
 	int i = col; 

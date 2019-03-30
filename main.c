@@ -8,7 +8,7 @@ I sincerely apologize for how ugly and redundant this code is. it was worse. thi
 #include <stdbool.h>
 #include "connect.h"
 
-void printBoard(int cols, int rows, int board[cols][rows]){//the board is ugly, but it works. i think the printing of the board is what takes the most time.
+void printBoard(int cols, int rows, int** board){//the board is ugly, but it works. i think the printing of the board is what takes the most time.
 	system("clear");
 	int i = 0; int j = 0;
 	for (j = 0; j < cols; j++){
@@ -155,9 +155,20 @@ int main(void){
 	bool fourConnected = false;
 	int piecesPlaced = 0;
 	while (wantsToPlay){
+
+		int *board[wide];
+		int i, j;
+		//board = malloc(tall*sizeof(int));
+		for (i=0; i<wide; i++){
+			board[i] = (int *)malloc(tall * sizeof(int));
+		}//do i need to swap the wide and tall?
+
+
+/*
+
 		int board[wide][tall];
-				int i, j;
-		int placed[wide];
+				int i, j;*/
+		int *placed = malloc(sizeof(int)*wide);
 		for (i = 0; i < wide; i++){
 			for (j = 0; j < tall; j++){
 				board[i][j] = -1;
@@ -198,13 +209,16 @@ int main(void){
 					board[currentCol][currentRow] = 2;
 				}
 			}
-//printf("placing a piece for %d in row %d and column %d\n", player, currentRow, currentCol); //keeping this here for future debugging, just in case
+printf("placing a piece for %d in row %d and column %d\n", player, currentRow, currentCol); //keeping this here for future debugging, just in case
 			piecesPlaced++;
 			placed[currentCol]++;
 			fourConnected = checkIfWon(wide, tall, board, placed, currentCol);
 			if (fourConnected) {printBoard(wide, tall, board);  gameFinished = true; playerWon = player; break;}
 			if (piecesPlaced >= boardSize) {printBoard(wide, tall, board);  gameFinished = true; playerWon = 0;}
 		}
+			/*for (i = 0; i < wide; i++){
+			free(board[i]);
+			}free (board);*/
 		if (playerWon == 0) {printf("\nThe board has been filled and no one scored a point.\n");}
 		if (playerWon == 1) score1++;
 		if (playerWon == 2) score2++;
@@ -323,6 +337,7 @@ int main(void){
 			}
 		}
 	}
+
 	printf("Hope you enjoyed playing!\n");
 	return 0;
 }

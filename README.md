@@ -8,6 +8,8 @@ The board itself was implemented using a 2d integer array. This is an unconventi
 Currently, the array is a simple 2d integer array, not using pointers or anything. I have noted that large board sizes cause a segmentation fault simply because the game runs out of space for the board; while a connect 4 game of 10000x10000 is gigantic and I personally doubt anyone would enjoy playing it, and the larger the board size the worse it displays, this is something I am going to fix if I have the time by changing the array so that it is allocated on the heap instead of the stack.  
 
 URL of video on how to run this program: https://youtu.be/4_PLtY5cagE
+URL of github: https://github.com/asmarsden/Connect4CS201
+github will be made public on Sunday the 31st of March.
 
 Step by step guide on how to run this program: 
 Download the main.c, connect.c, connect.h, and makefile files into a new folder within your terminal. 
