@@ -161,13 +161,8 @@ int main(void){
 		//board = malloc(tall*sizeof(int));
 		for (i=0; i<wide; i++){
 			board[i] = (int *)malloc(tall * sizeof(int));
-		}//do i need to swap the wide and tall?
+		}//do i need to swap the wide and tall? turns out Yes i did need to
 
-
-/*
-
-		int board[wide][tall];
-				int i, j;*/
 		int *placed = malloc(sizeof(int)*wide);
 		for (i = 0; i < wide; i++){
 			for (j = 0; j < tall; j++){
